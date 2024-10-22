@@ -1,0 +1,39 @@
+<section class="section">
+    <div class="container">
+      <h1 class="title">Galería de Fotos</h1>
+
+      <div class="columns is-multiline">
+        <% @photos.each do |photo| %>
+          <div class="column is-one-third">
+            <div class="card">
+              <div class="card-image">
+                <% if photo.image.attached? %>
+                  <figure class="image is-4by3">
+                    <%= link_to image_tag(photo.image), photo_path(photo) %>
+                  </figure>
+                <% end %>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4"><%= photo.caption %></p>
+                  </div>
+                </div>
+              </div>
+              <footer class="card-footer">
+                <%= link_to 'Ver Foto', photo_path(photo), class: "card-footer-item" %>
+                <% if current_user&.admin? %>
+                  <%= link_to 'Editar', edit_photo_path(photo), class: "card-footer-item" %>
+                  <%= link_to 'Borrar', photo_path(photo), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "card-footer-item has-text-danger" %>
+                <% end %>
+              </footer>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if current_user&.admin? %>
+        <%= link_to 'Subir nueva foto', new_photo_path, class: "button is-primary is-large" %>
+      <% end %>
+    </div>
+  </section>

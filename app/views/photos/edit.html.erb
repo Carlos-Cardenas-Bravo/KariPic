@@ -1,0 +1,51 @@
+<section class="section">
+    <div class="container">
+      <h1 class="title">Editar Foto</h1>
+
+      <div class="box">
+        <%= form_with model: @photo, local: true do |form| %>
+          <% if @photo.errors.any? %>
+            <div class="notification is-danger">
+              <p><strong><%= pluralize(@photo.errors.count, "error") %> impide(n) editar la foto:</strong></p>
+              <ul>
+                <% @photo.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="field">
+            <label class="label">Leyenda</label>
+            <div class="control">
+              <%= form.text_area :caption, class: "textarea" %>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Cambiar imagen</label>
+            <div class="file has-name">
+              <label class="file-label">
+                <%= form.file_field :image, class: "file-input" %>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">Seleccionar nueva imagen...</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <%= form.submit 'Actualizar Foto', class: "button is-link" %>
+            </div>
+            <div class="control">
+              <%= link_to 'Cancelar', photo_path(@photo), class: "button is-light" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
