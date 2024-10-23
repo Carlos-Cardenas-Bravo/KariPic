@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html class="theme-dark">
   <head>
-    <title><%= content_for(:title) || "Cat" %></title>
+    <title><%= content_for(:title) || "KarinPics" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <%= yield :head %>
 
+    <!-- PWA configuration -->
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
+
+    <!-- Custom application styles and scripts -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-
   </head>
 
   <body class="has-navbar-fixed-top">
     <div class="container" style="max-width: 70%; margin: auto;">
+      <!-- Navbar -->
       <%= render 'shared/navbar_bulma' %>
 
+      <!-- Flash notifications -->
       <% if flash[:notice] %>
         <div class="notification is-success" role="alert">
           <%= flash[:notice] %>
@@ -34,6 +40,8 @@
         </div>
       <% end %>
 
-    <%= yield %>
+      <!-- Main content -->
+      <%= yield %>
+    </div>
   </body>
 </html>

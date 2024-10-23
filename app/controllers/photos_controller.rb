@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :only_admin_can_manage_photos, only: [:new, :create, :edit, :update, :destroy]
 
   def index
@@ -18,7 +18,7 @@ class PhotosController < ApplicationController
   def create
     @photo = current_user.photos.build(photo_params)
     if @photo.save
-      redirect_to @photo, notice: 'Foto subida exitosamente.'
+      redirect_to @photo, notice: "Foto subida exitosamente."
     else
       render :new
     end
@@ -31,7 +31,7 @@ class PhotosController < ApplicationController
   def update
     @photo = Photo.find(params[:id])
     if @photo.update(photo_params)
-      redirect_to @photo, notice: 'Foto actualizada exitosamente.'
+      redirect_to @photo, notice: "Foto actualizada exitosamente."
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class PhotosController < ApplicationController
   def destroy
     @photo = Photo.find(params[:id])
     @photo.destroy
-    redirect_to photos_path, notice: 'Foto eliminada exitosamente.'
+    redirect_to photos_path, notice: "Foto eliminada exitosamente."
   end
 
   private
@@ -50,7 +50,6 @@ class PhotosController < ApplicationController
   end
 
   def only_admin_can_manage_photos
-    redirect_to root_path, alert: 'No tienes permiso para realizar esta acción.' unless current_user.admin?
+    redirect_to root_path, alert: "No tienes permiso para realizar esta acción." unless current_user.admin?
   end
 end
-

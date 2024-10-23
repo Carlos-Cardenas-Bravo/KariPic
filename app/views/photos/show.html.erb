@@ -1,68 +1,79 @@
 <section class="section">
-    <div class="container">
-      <h1 class="title"><%= @photo.caption %></h1>
+  <div class="container">
+    <h1 class="title"><%= @photo.caption %></h1>
 
-      <% if @photo.image.attached? %>
-        <figure class="image is-4by3">
-          <%= image_tag @photo.image, class: "img-fluid" %>
-        </figure>
-      <% end %>
+    <% if @photo.image.attached? %>
+      <figure class="image is-4by3">
+        <!-- Cambiar a resized_image para mantener la proporción -->
+        <%= image_tag url_for(@photo.resized_image), class: "img-fluid" %>
+      </figure>
+    <% end %>
 
-      <hr>
+    <hr>
 
-      <h2 class="subtitle">Comentarios</h2>
+    <h2 class="subtitle">Comentarios</h2>
 
-      <div class="box">
-        <% @photo.comments.each do |comment| %>
-          <article class="media">
-            <figure class="media-left">
-              <%= image_tag comment.user.profile_image_url, class: "image is-64x64" if comment.user.profile_image.attached? %>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong><%= comment.user.name %></strong>
-                  <br>
-                  <%= comment.content %>
-                </p>
-              </div>
-            </div>
-            <% if comment.user == current_user || current_user.admin? %>
-              <div class="media-right">
-                <%= link_to 'Borrar', photo_comment_path(@photo, comment), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "button is-small is-danger" %>
-              </div>
+    <div class="box">
+      <% @photo.comments.each do |comment| %>
+        <article class="media">
+          <figure class="media-left">
+            <!-- Mostrar la imagen de perfil del usuario que hizo el comentario -->
+            <% if comment.user.profile_image.attached? %>
+              <%= image_tag url_for(comment.user.resized_profile_image), class: "image is-64x64 is-rounded" %>
+            <% else %>
+              <!-- Imagen por defecto si no tiene una imagen de perfil -->
+              <%= image_tag "default_profile.png", class: "image is-64x64 is-rounded" %>
             <% end %>
-          </article>
-          <hr>
-        <% end %>
-      </div>
+          </figure>
 
-      <% if current_user %>
-        <h3 class="subtitle">Agregar un comentario</h3>
-        <%= form_with model: [@photo, @comment], local: true do |form| %>
-          <div class="field">
-            <div class="control">
-              <%= form.text_area :content, class: "textarea", placeholder: "Escribe un comentario..." %>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong><%= comment.user.name %></strong>
+                <br>
+                <%= comment.content %>
+              </p>
             </div>
           </div>
 
-          <div class="field">
-            <div class="control">
-              <%= form.submit 'Enviar', class: "button is-link" %>
+          <!-- Opción de borrar el comentario si es el dueño o administrador -->
+          <% if comment.user == current_user || current_user&.admin? %>
+            <div class="media-right">
+              <%= link_to 'Borrar', photo_comment_path(@photo, comment), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "button is-small is-danger" %>
             </div>
-          </div>
-        <% end %>
-      <% else %>
-        <p>Debes <%= link_to 'iniciar sesión', new_user_session_path %> para agregar comentarios.</p>
+          <% end %>
+        </article>
+        <hr>
       <% end %>
-
-      <hr>
-
-      <% if current_user&.admin? %>
-        <%= link_to 'Editar', edit_photo_path(@photo), class: "button is-info" %>
-        <%= link_to 'Borrar', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger" %>
-      <% end %>
-
-      <%= link_to 'Volver', photos_path, class: "button is-light" %>
     </div>
-  </section>
+
+    <% if current_user %>
+      <h3 class="subtitle">Agregar un comentario</h3>
+      <%= form_with model: [@photo, @comment], local: true do |form| %>
+        <div class="field">
+          <div class="control">
+            <%= form.text_area :content, class: "textarea", placeholder: "Escribe un comentario..." %>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <%= form.submit 'Enviar', class: "button is-link" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p>Debes <%= link_to 'iniciar sesión', new_user_session_path %> para agregar comentarios.</p>
+    <% end %>
+
+    <hr>
+
+    <!-- Solo el administrador puede editar o borrar la foto -->
+    <% if current_user&.admin? %>
+      <%= link_to 'Editar', edit_photo_path(@photo), class: "button is-info" %>
+      <%= link_to 'Borrar', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger" %>
+    <% end %>
+
+    <%= link_to 'Volver', photos_path, class: "button is-light" %>
+  </div>
+</section>

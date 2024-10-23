@@ -1,51 +1,77 @@
 <section class="section">
-    <div class="container">
-      <h1 class="title">Editar Foto</h1>
+  <div class="container">
+    <h1 class="title">Editar Foto</h1>
 
-      <div class="box">
-        <%= form_with model: @photo, local: true do |form| %>
-          <% if @photo.errors.any? %>
-            <div class="notification is-danger">
-              <p><strong><%= pluralize(@photo.errors.count, "error") %> impide(n) editar la foto:</strong></p>
-              <ul>
-                <% @photo.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
-
-          <div class="field">
-            <label class="label">Leyenda</label>
-            <div class="control">
-              <%= form.text_area :caption, class: "textarea" %>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label">Cambiar imagen</label>
-            <div class="file has-name">
-              <label class="file-label">
-                <%= form.file_field :image, class: "file-input" %>
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">Seleccionar nueva imagen...</span>
-                </span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field is-grouped">
-            <div class="control">
-              <%= form.submit 'Actualizar Foto', class: "button is-link" %>
-            </div>
-            <div class="control">
-              <%= link_to 'Cancelar', photo_path(@photo), class: "button is-light" %>
-            </div>
+    <div class="box">
+      <%= form_with model: @photo, local: true do |form| %>
+        <% if @photo.errors.any? %>
+          <div class="notification is-danger">
+            <p><strong><%= pluralize(@photo.errors.count, "error") %> impide(n) editar la foto:</strong></p>
+            <ul>
+              <% @photo.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
           </div>
         <% end %>
+
+        <!-- Mostrar la imagen actual -->
+        <% if @photo.image.attached? %>
+          <div class="field">
+            <label class="label">Imagen actual</label>
+            <figure class="image is-4by3">
+              <%= image_tag url_for(@photo.image), class: "img-fluid" %>
+            </figure>
+          </div>
+        <% end %>
+
+        <div class="field">
+          <label class="label">Leyenda</label>
+          <div class="control">
+            <%= form.text_area :caption, class: "textarea" %>
+          </div>
+        </div>
+
+        <!-- Seleccionar nueva imagen -->
+        <div class="field">
+          <label class="label">Cambiar imagen</label>
+          <div class="file has-name is-boxed">
+            <label class="file-label">
+              <%= form.file_field :image, class: "file-input", id: "image-upload" %>
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">Seleccionar nueva imagen...</span>
+              </span>
+              <span class="file-name" id="file-name">No se ha seleccionado ninguna imagen</span> <!-- Mostrar el nombre del archivo seleccionado -->
+            </label>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <%= form.submit 'Actualizar Foto', class: "button is-link" %>
+          </div>
+          <div class="control">
+            <%= link_to 'Cancelar', photo_path(@photo), class: "button is-light" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Botón para eliminar la foto -->
+      <hr>
+      <div class="field">
+        <%= link_to 'Eliminar Foto', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger is-fullwidth" %>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<script>
+  // Mostrar el nombre del archivo seleccionado
+  document.getElementById('image-upload').addEventListener('change', function() {
+    var fileName = this.files[0].name;
+    document.getElementById('file-name').textContent = fileName;
+  });
+</script>

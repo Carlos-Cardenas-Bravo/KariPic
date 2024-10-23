@@ -1,12 +1,8 @@
 # rubocop:disable Layout/SpaceInsideArrayLiteralBrackets
 Rails.application.routes.draw do
+  devise_for :users
 
-  resources :users, only: [:index] do
-    member do
-      get "edit_role"        # Ruta para que el administrador vea el formulario para editar el rol
-      patch "update_role"    # Ruta para que el administrador actualice el rol
-    end
-  end
+  resources :users, only: [:index]
 
   resources :photos do
     resources :comments, only: [:create, :new, :edit, :update, :destroy]

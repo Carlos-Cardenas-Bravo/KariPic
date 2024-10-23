@@ -1,43 +1,112 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2 class="title">Editar Perfil</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "box" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <!-- Campo para el nombre -->
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <label class="label"><%= f.label :name %></label>
+    <div class="control">
+      <%= f.text_field :name, class: "input", autocomplete: "name" %>
+    </div>
+  </div>
+
+  <!-- Campo para el email -->
+  <div class="field">
+    <label class="label"><%= f.label :email %></label>
+    <div class="control">
+      <%= f.email_field :email, class: "input", autofocus: true, autocomplete: "email" %>
+    </div>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <div class="notification is-info">Esperando confirmación para: <%= resource.unconfirmed_email %></div>
   <% end %>
 
+  <!-- Mostrar la imagen de perfil actual si existe -->
+  <% if resource.profile_image.attached? %>
+    <div class="field">
+      <label class="label">Foto de Perfil Actual</label>
+      <figure class="image is-128x128">
+        <%= image_tag url_for(resource.resized_profile_image), class: "is-rounded" %>
+      </figure>
+    </div>
+  <% end %>
+
+  <!-- Campo para cambiar la imagen de perfil -->
   <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
+    <label class="label"><%= f.label :profile_image, "Cambiar Foto de Perfil" %></label>
+    <div class="file has-name is-boxed">
+      <label class="file-label">
+        <%= f.file_field :profile_image, class: "file-input", id: "image-upload" %>
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-upload"></i>
+          </span>
+          <span class="file-label">Seleccionar nueva imagen...</span>
+        </span>
+        <span class="file-name" id="file-name">No se ha seleccionado ninguna imagen</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Campo para cambiar la contraseña -->
+  <div class="field">
+    <label class="label"><%= f.label :password %> <i>(deja en blanco si no quieres cambiarla)</i></label>
+    <div class="control">
+      <%= f.password_field :password, class: "input", autocomplete: "new-password" %>
+    </div>
     <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
+      <p class="help">Mínimo <%= @minimum_password_length %> caracteres</p>
     <% end %>
   </div>
 
+  <!-- Campo para confirmar la nueva contraseña -->
   <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    <label class="label"><%= f.label :password_confirmation %></label>
+    <div class="control">
+      <%= f.password_field :password_confirmation, class: "input", autocomplete: "new-password" %>
+    </div>
   </div>
 
+  <!-- Campo para la contraseña actual -->
   <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
+    <label class="label"><%= f.label :current_password %> <i>(necesaria para confirmar cambios)</i></label>
+    <div class="control">
+      <%= f.password_field :current_password, class: "input", autocomplete: "current-password" %>
+    </div>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
+  <!-- Botón para actualizar los cambios -->
+  <div class="field is-grouped">
+    <div class="control">
+      <%= f.submit "Actualizar Perfil", class: "button is-primary" %>
+    </div>
+    <div class="control">
+      <%= link_to "Cancelar", root_path, class: "button is-light" %>
+    </div>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<!-- Sección para cancelar la cuenta -->
+<h3 class="title is-4">Cancelar mi cuenta</h3>
+<p>¿No estás satisfecho? Puedes cancelar tu cuenta.</p>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+<!-- Botones en una sola línea -->
+<div class="field is-grouped">
+  <div class="control">
+    <%= button_to "Cancelar mi cuenta", registration_path(resource_name), data: { confirm: "¿Estás seguro?", turbo_confirm: "¿Estás seguro?" }, method: :delete, class: "button is-danger" %>
+  </div>
+  <div class="control">
+    <%= link_to "Volver", root_path, class: "button is-light" %>
+  </div>
+</div>
 
-<%= link_to "Back", :back %>
+<!-- Script para mostrar el nombre del archivo de imagen seleccionado -->
+<script>
+  document.getElementById('image-upload').addEventListener('change', function() {
+    var fileName = this.files[0].name;
+    document.getElementById('file-name').textContent = fileName;
+  });
+</script>
+
