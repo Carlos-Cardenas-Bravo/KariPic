@@ -19,7 +19,9 @@
           <figure class="media-left">
             <!-- Mostrar la imagen de perfil del usuario que hizo el comentario -->
             <% if comment.user.profile_image.attached? %>
-              <%= image_tag url_for(comment.user.resized_profile_image), class: "image is-64x64 is-rounded" %>
+              <figure class="image is-64x64">
+                <%= image_tag url_for(comment.user.resized_profile_image), class: "is-rounded" %>
+              </figure>
             <% else %>
               <!-- Imagen por defecto si no tiene una imagen de perfil -->
               <%= image_tag "default_profile.png", class: "image is-64x64 is-rounded" %>

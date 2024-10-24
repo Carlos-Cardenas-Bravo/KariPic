@@ -1,9 +1,10 @@
 # rubocop:disable Layout/SpaceInsideArrayLiteralBrackets
 Rails.application.routes.draw do
   root "photos#index"
-  devise_for :users
   resources :users, only: [:index]
-
+  devise_for :users, controllers: {
+    passwords: "users/passwords"     # personalizo el restablecimiento de contraseña
+  }
   resources :photos do
     resources :comments, only: [:create, :new, :edit, :update, :destroy]
   end
