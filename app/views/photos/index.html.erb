@@ -25,7 +25,9 @@
               <%= link_to 'Ver Foto', photo_path(photo), class: "card-footer-item" %>
               <% if current_user&.admin? %>
                 <%= link_to 'Editar', edit_photo_path(photo), class: "card-footer-item" %>
-                <%= link_to 'Borrar', photo_path(photo), method: :delete, data: { confirm: '¿Estás seguro?', turbo: false }, class: "card-footer-item has-text-danger" %>
+                <div class="card-footer-item" style="display: flex; align-items: center;">
+                  <%= button_to 'Borrar', photo_path(photo), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "button is-danger" %>
+                </div>
                 <% end %>
             </footer>
           </div>

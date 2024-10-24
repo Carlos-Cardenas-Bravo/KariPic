@@ -20,7 +20,7 @@
           <div class="field">
             <label class="label">Imagen actual</label>
             <figure class="image is-4by3">
-              <%= image_tag url_for(@photo.image), class: "img-fluid" %>
+              <%= image_tag url_for(@photo.resized_image), class: "img-fluid" %>
             </figure>
           </div>
         <% end %>
@@ -44,7 +44,7 @@
                 </span>
                 <span class="file-label">Seleccionar nueva imagen...</span>
               </span>
-              <span class="file-name" id="file-name">No se ha seleccionado ninguna imagen</span> <!-- Mostrar el nombre del archivo seleccionado -->
+              <span class="file-name" id="file-name">No se ha seleccionado ninguna imagen</span>
             </label>
           </div>
         </div>
@@ -57,13 +57,14 @@
             <%= link_to 'Cancelar', photo_path(@photo), class: "button is-light" %>
           </div>
         </div>
-      <% end %>
 
-      <!-- Botón para eliminar la foto -->
-      <hr>
-      <div class="field">
-        <%= link_to 'Eliminar Foto', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger is-fullwidth" %>
-      </div>
+        <!-- Botón para eliminar la foto dentro del form -->
+        <div class="field">
+          <div class="control">
+            <%= button_to 'Eliminar Foto', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger" %>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>

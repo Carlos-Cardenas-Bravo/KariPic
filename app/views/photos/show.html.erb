@@ -39,7 +39,7 @@
           <!-- Opción de borrar el comentario si es el dueño o administrador -->
           <% if comment.user == current_user || current_user&.admin? %>
             <div class="media-right">
-              <%= link_to 'Borrar', photo_comment_path(@photo, comment), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "button is-small is-danger" %>
+              <%= button_to 'Borrar', photo_comment_path(@photo, comment), method: :delete, data: { confirm: '¿Estás seguro?' }, class: "button is-small is-danger" %>
             </div>
           <% end %>
         </article>
@@ -69,11 +69,12 @@
     <hr>
 
     <!-- Solo el administrador puede editar o borrar la foto -->
-    <% if current_user&.admin? %>
-      <%= link_to 'Editar', edit_photo_path(@photo), class: "button is-info" %>
-      <%= link_to 'Borrar', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger" %>
-    <% end %>
-
-    <%= link_to 'Volver', photos_path, class: "button is-light" %>
+    <div class="buttons">
+      <% if current_user&.admin? %>
+        <%= link_to 'Editar', edit_photo_path(@photo), class: "button is-info" %>
+        <%= button_to 'Borrar', photo_path(@photo), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta foto?' }, class: "button is-danger" %>
+      <% end %>
+      <%= link_to 'Volver', photos_path, class: "button is-light" %>
+  </div>
   </div>
 </section>
